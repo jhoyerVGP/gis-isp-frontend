@@ -7,8 +7,8 @@ export interface ProfileUser {
   // Data Person
   firstName: string;
   lastName: string;
-  phone: string;
-  ci: string;
+  phone?: string;
+  ci?: string;
 
   // Data User
   username: string;
@@ -17,4 +17,15 @@ export interface ProfileUser {
   roleName: string;
   status: UserStatus;
   twoFactorEnabled: boolean;
+  avatarUrl?: string;
+}
+
+// type activate two factor authentication
+export interface SetupResponse {
+  secret: string;
+  otpauthUri: string;
+}
+
+export interface BackupCodesResponse {
+  backupCodes: string[];
 }

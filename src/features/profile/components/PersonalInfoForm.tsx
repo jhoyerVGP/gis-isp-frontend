@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   personalInfoSchema,
   type PersonalInfoInput,
 } from "@/features/profile/profile.schema";
 import type { ProfileUser } from "../types";
-import { getFriendlyErrorMessage } from "@/utils/errorHandler";
+import { FormTextField } from "@/components/common/FormTextField";
+import { useProfileHandler } from "../hooks/useProfileHandler";
+import { Card } from "@/components/ui/card";
 
 export function PersonalInfoForm({
   profile,
@@ -18,9 +18,9 @@ export function PersonalInfoForm({
   canEditAll: boolean;
 }) {
   const {
-    register,
+    control,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { isDirty },
   } = useForm<PersonalInfoInput>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
@@ -31,82 +31,67 @@ export function PersonalInfoForm({
     },
   });
 
-  //const { mutate, isPending, error } = useUpdatePersonalInfo();
+  const { isLoading, updatePersonProfile } = useProfileHandler();
 
   const onSubmit = (data: PersonalInfoInput) => {
-    //mutate(data);
+    updatePersonProfile(profile.id, data);
   };
 
   return (
-    <section className="rounded-lg border bg-card p-5">
+    <Card className="p-2.5 lg:p-6">
       <header className="mb-4">
         <h2 className="text-base font-semibold">Datos personales</h2>
         <p className="text-sm text-muted-foreground">
-          {canEditAll
-            ? "Como administrador puedes editar todos los campos."
-            : "Solo puedes actualizar tu teléfono. Contacta a un administrador para cambiar nombre o CI."}
+          Aquí puedes ver y actualizar solo tus datos personales disponibles
+          como teléfono.
         </p>
       </header>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="firstName">Nombres</Label>
-            <Input
-              id="firstName"
-              disabled={!canEditAll}
-              {...register("firstName")}
-            />
-            {errors.firstName && (
-              <p className="text-xs text-destructive">
-                {errors.firstName.message}
-              </p>
-            )}
-          </div>
+          <FormTextField
+            control={control}
+            name="firstName"
+            label="Nombres"
+            placeholder="Ingresa tus nombres"
+            readOnly={true}
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="lastName">Apellidos</Label>
-            <Input
-              id="lastName"
-              disabled={!canEditAll}
-              {...register("lastName")}
-            />
-            {errors.lastName && (
-              <p className="text-xs text-destructive">
-                {errors.lastName.message}
-              </p>
-            )}
-          </div>
+          <FormTextField
+            control={control}
+            name="lastName"
+            label="Apellidos"
+            placeholder="Ingresa tus apellidos"
+            readOnly={true}
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="ci">CI</Label>
-            <Input id="ci" disabled={!canEditAll} {...register("ci")} />
-            {errors.ci && (
-              <p className="text-xs text-destructive">{errors.ci.message}</p>
-            )}
-          </div>
+          <FormTextField
+            control={control}
+            name="ci"
+            label="Cédula de identidad"
+            placeholder="Ingresa tu cédula"
+            readOnly={true}
+            readOnlyEmptyText="Sin cédula de identidad"
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="phone">Teléfono</Label>
-            <Input id="phone" {...register("phone")} />
-            {errors.phone && (
-              <p className="text-xs text-destructive">{errors.phone.message}</p>
-            )}
-          </div>
+          <FormTextField
+            control={control}
+            name="phone"
+            label="Teléfono"
+            placeholder="Ingresa tu teléfono"
+          />
         </div>
 
-       {/*  {error && (
-          <div className="rounded bg-red-100 p-2 text-sm text-red-700">
-            {getFriendlyErrorMessage(error)}
-          </div>
-        )} */}
-
-        {/* <div className="flex justify-end">
-          <Button type="submit" disabled={isPending || !isDirty}>
-            {isPending ? "Guardando…" : "Guardar cambios"}
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            disabled={isLoading || !isDirty}
+            className="cursor-pointer"
+          >
+            {isLoading ? "Guardando…" : "Guardar cambios"}
           </Button>
-        </div> */}
+        </div>
       </form>
-    </section>
+    </Card>
   );
 }

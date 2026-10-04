@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/sidebar";
 import type { UserAuthenticated } from "@/features/auth/types";
 import useLogout from "@/features/auth/hooks/useLogout";
+import avatarDefault from "@/assets/avatarDefault.png";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 export function NavUser({ user }: { user: UserAuthenticated }) {
   const { isMobile } = useSidebar();
@@ -37,17 +39,18 @@ export function NavUser({ user }: { user: UserAuthenticated }) {
             render={
               <SidebarMenuButton
                 size="lg"
-                className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground"
+                className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground cursor-pointer"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.firstName} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarImage
+                    src={getImageUrl(user.avatarUrl) || avatarDefault}
+                    alt={user.firstName}
+                  />
                 </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
+                <div className="grid flex-1 text-left text-sm  items-center justify-center">
                   <span className="truncate font-medium">
                     {user.firstName} {user.lastName}
                   </span>
-                  <span className="truncate text-xs">{user.email}</span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
@@ -63,8 +66,10 @@ export function NavUser({ user }: { user: UserAuthenticated }) {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar} alt={user.firstName} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                    <AvatarImage
+                      src={getImageUrl(user.avatarUrl) || avatarDefault}
+                      alt={user.firstName}
+                    />
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">
@@ -79,7 +84,7 @@ export function NavUser({ user }: { user: UserAuthenticated }) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link to="/profile" className="flex items-center gap-2">
+                <Link to="/profile" className="flex items-center gap-2 w-full">
                   <User />
                   Perfil
                 </Link>

@@ -1,8 +1,14 @@
 // Types for Login
-export interface AuthResponse {
+export interface LoginSuccessResponse {
   tokenType: string;
   expiresIn: number;
 }
+
+export interface TwoFactorRequiredResponse {
+  twoFactorRequired: true;
+}
+
+export type LoginResponse = LoginSuccessResponse | TwoFactorRequiredResponse;
 
 // Types for User
 export interface UserAuthenticated {
@@ -15,6 +21,5 @@ export interface UserAuthenticated {
   permissions: string[];
   mustSetPassword: boolean;
   twoFactorEnabled: boolean;
-  // falta agregar el avatar en la respuesta de la API
-  avatar?: string;
+  avatarUrl?: string;
 }

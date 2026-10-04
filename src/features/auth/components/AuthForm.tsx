@@ -21,7 +21,7 @@ function AuthForm() {
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -36,18 +36,18 @@ function AuthForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      {/*  email input */}
+      {/*  username input */}
       <div className="space-y-2">
-        <Label htmlFor="email">Correo electrónico</Label>
+        <Label htmlFor="username">Nombre de usuario</Label>
         <Input
-          id="email"
-          type="email"
-          {...register("email")}
-          placeholder="correo@empresa.com"
+          id="username"
+          type="text"
+          {...register("username")}
+          placeholder="nombredeusuario"
         />
-        {errors.email && (
+        {errors.username && (
           <p className="text-xs font-medium text-destructive">
-            {errors.email.message}
+            {errors.username.message}
           </p>
         )}
       </div>

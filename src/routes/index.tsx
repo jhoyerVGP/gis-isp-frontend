@@ -7,18 +7,23 @@ import LoginPage from "@/pages/LoginPage";
 import DashboardPage from "@/pages/DashboardPage";
 import UsersPage from "@/pages/UsersPage";
 import ProfilePage from "@/pages/ProfilePage";
-
-// Complex pages (Network)
-/* import { BoxesPage } from "@/pages/network/BoxesPage";
-import { PortsPage } from "@/pages/network/PortsPage";
-import { CablesPage } from "@/pages/network/CablesPage";
-import { NodesPage } from "@/pages/network/NodesPage"; */
+import ConfirmEmailChangePage from "@/pages/ConfirmEmailChangePage";
+import TwoFactorPage from "@/pages/TwoFactorPage";
+import RolesPage from "@/pages/RolesPage";
 
 export const router = createBrowserRouter([
   // Rutas Públicas / Auth
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/verify-email",
+    element: <ConfirmEmailChangePage />,
+  },
+  {
+    path: "/login/2fa",
+    element: <TwoFactorPage />,
   },
 
   // Rutas Protegidas (Requieren Login)
@@ -32,7 +37,7 @@ export const router = createBrowserRouter([
           { path: "dashboard", element: <DashboardPage /> },
           { path: "users", element: <UsersPage /> },
           { path: "profile", element: <ProfilePage /> },
-          /*{ path: "clients", element: <ClientsPage /> }, */
+          { path: "roles", element: <RolesPage /> },
 
           // Subrutas del módulo Network (GIS)
           {

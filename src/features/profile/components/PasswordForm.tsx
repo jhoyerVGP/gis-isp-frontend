@@ -2,26 +2,19 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Eye, EyeOff } from "lucide-react";
 import {
   changePasswordSchema,
   type ChangePasswordInput,
 } from "@/features/profile/profile.schema";
-//import { useChangePassword } from "../hooks/useProfile";
-import { getFriendlyErrorMessage } from "@/utils/errorHandler";
+import { Card } from "@/components/ui/card";
+import { useProfileHandler } from "../hooks/useProfileHandler";
+import { FormTextField } from "@/components/common/FormTextField";
+import { FormPasswordField } from "@/components/common/FormPasswordField";
 
 export function PasswordForm() {
-  const [show, setShow] = useState(false);
-  //const { mutate, isPending, error } = useChangePassword();
+  const { isLoading, changePassword } = useProfileHandler();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<ChangePasswordInput>({
+  const { control, handleSubmit } = useForm<ChangePasswordInput>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
       currentPassword: "",
@@ -31,11 +24,11 @@ export function PasswordForm() {
   });
 
   const onSubmit = (data: ChangePasswordInput) => {
-    //mutate(data, { onSuccess: () => reset() });
+    changePassword(data.currentPassword, data.newPassword);
   };
 
   return (
-    <section className="rounded-lg border bg-card p-5">
+    <Card className="p-2 lg:p-6">
       <header className="mb-4">
         <h2 className="text-base font-semibold">Cambiar contraseña</h2>
         <p className="text-sm text-muted-foreground">
@@ -44,78 +37,37 @@ export function PasswordForm() {
       </header>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="currentPassword">Contraseña actual</Label>
-          <Input
-            id="currentPassword"
-            type={show ? "text" : "password"}
-            {...register("currentPassword")}
-          />
-          {errors.currentPassword && (
-            <p className="text-xs text-destructive">
-              {errors.currentPassword.message}
-            </p>
-          )}
-        </div>
+        <FormTextField
+          control={control}
+          name="currentPassword"
+          label="Contraseña actual"
+          required
+        />
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="newPassword">Nueva contraseña</Label>
-            <div className="relative">
-              <Input
-                id="newPassword"
-                type={show ? "text" : "password"}
-                className="pr-10"
-                {...register("newPassword")}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="absolute right-0 top-0 h-full px-3 hover:bg-transparent text-muted-foreground"
-                onClick={() => setShow((v) => !v)}
-              >
-                {show ? (
-                  <EyeOff className="size-4" />
-                ) : (
-                  <Eye className="size-4" />
-                )}
-              </Button>
-            </div>
-            {errors.newPassword && (
-              <p className="text-xs text-destructive">
-                {errors.newPassword.message}
-              </p>
-            )}
-          </div>
+          <FormPasswordField
+            control={control}
+            name="newPassword"
+            label="Nueva contraseña"
+            autoComplete="new-password"
+            required
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
-            <Input
-              id="confirmPassword"
-              type={show ? "text" : "password"}
-              {...register("confirmPassword")}
-            />
-            {errors.confirmPassword && (
-              <p className="text-xs text-destructive">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
+          <FormPasswordField
+            control={control}
+            name="confirmPassword"
+            label="Confirmar contraseña"
+            autoComplete="new-password"
+            required
+          />
         </div>
 
-        {/* {error && (
-          <div className="rounded bg-red-100 p-2 text-sm text-red-700">
-            {getFriendlyErrorMessage(error)}
-          </div>
-        )}
-
         <div className="flex justify-end">
-          <Button type="submit" disabled={isPending}>
-            {isPending ? "Actualizando…" : "Cambiar contraseña"}
+          <Button type="submit" disabled={isLoading} className="cursor-pointer">
+            {isLoading ? "Actualizando…" : "Cambiar contraseña"}
           </Button>
-        </div> */}
+        </div>
       </form>
-    </section>
+    </Card>
   );
 }

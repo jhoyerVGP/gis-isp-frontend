@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
+import { SidebarGroupLabel } from "../ui/sidebar";
 
 type NavItem = {
   title: string;
@@ -13,7 +14,8 @@ type NavMainProps = {
 
 export function NavButton({ items }: NavMainProps) {
   return (
-    <nav aria-label="Main navigation" className="flex flex-col gap-2 p-2">
+    <nav aria-label="Main navigation" className="flex flex-col p-2">
+      <SidebarGroupLabel>ADMINISTRACIÓN</SidebarGroupLabel>
       {/* Navigation items */}
       <ul className="flex flex-col gap-1">
         {items.map((item) => {

@@ -9,13 +9,7 @@ import { NavUser } from "@/components/sidebar/NavUser";
 import { useMe } from "@/features/auth/hooks/useMe";
 import HeaderSidebar from "../sidebar/HeaderSidebar";
 
-import {
-  ChartBar,
-  LayoutDashboard,
-  Folder,
-  ListTree,
-  Users,
-} from "lucide-react";
+import { ShieldCheck, LayoutDashboard, Folder, Map, Users } from "lucide-react";
 import { NavButton } from "../sidebar/NavButton";
 
 const navMain = [
@@ -27,22 +21,17 @@ const navMain = [
   {
     title: "Usuarios",
     url: "/users",
-    icon: ListTree,
+    icon: Users,
   },
   {
     title: "Mapa",
     url: "/map",
-    icon: ChartBar,
+    icon: Map,
   },
   {
-    title: "Projects",
-    url: "#",
-    icon: Folder,
-  },
-  {
-    title: "Team",
-    url: "#",
-    icon: Users,
+    title: "Roles",
+    url: "/roles",
+    icon: ShieldCheck,
   },
 ];
 

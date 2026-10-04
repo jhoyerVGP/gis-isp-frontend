@@ -9,14 +9,12 @@ import {
   changeEmailSchema,
   type ChangeEmailInput,
 } from "@/features/profile/profile.schema";
-//import { useChangeEmail } from "../hooks/useProfile";
 import type { ProfileUser } from "../types";
-import { getFriendlyErrorMessage } from "@/utils/errorHandler";
+import { Card } from "@/components/ui/card";
+import { useProfileHandler } from "../hooks/useProfileHandler";
 
 export function EmailForm({ profile }: { profile: ProfileUser }) {
   const [sent, setSent] = useState(false);
-  //const { mutate, isPending, error } = useChangeEmail();
-
   const {
     register,
     handleSubmit,
@@ -31,17 +29,16 @@ export function EmailForm({ profile }: { profile: ProfileUser }) {
     },
   });
 
+  const { isLoading, changeEmail } = useProfileHandler();
+
   const onSubmit = (data: ChangeEmailInput) => {
-    /* mutate(data, {
-      onSuccess: () => {
-        setSent(true);
-        reset();
-      },
-    }); */
+    changeEmail(data.newEmail, data.currentPassword);
+    setSent(true);
+    reset();
   };
 
   return (
-    <section className="rounded-lg border bg-card p-5">
+    <Card className="p-2.5 lg:p-6">
       <header className="mb-4">
         <h2 className="text-base font-semibold">Correo electrónico</h2>
         <p className="text-sm text-muted-foreground">
@@ -103,20 +100,18 @@ export function EmailForm({ profile }: { profile: ProfileUser }) {
               </p>
             )}
           </div>
-          {/* 
-          {error && (
-            <div className="rounded bg-red-100 p-2 text-sm text-red-700">
-              {getFriendlyErrorMessage(error)}
-            </div>
-          )}
 
           <div className="flex justify-end">
-            <Button type="submit" disabled={isPending}>
-              {isPending ? "Enviando…" : "Solicitar cambio"}
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="cursor-pointer"
+            >
+              {isLoading ? "Enviando…" : "Solicitar cambio"}
             </Button>
-          </div> */}
+          </div>
         </form>
       )}
-    </section>
+    </Card>
   );
 }
